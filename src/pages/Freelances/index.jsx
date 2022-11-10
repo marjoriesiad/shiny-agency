@@ -1,8 +1,7 @@
+import { useEffect, useState } from 'react'
 import Card from '../../components/Card'
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { Loader } from '../../utils/style/Atoms'
 
 const CardsContainer = styled.div`
@@ -28,47 +27,44 @@ const PageSubtitle = styled.h2`
   text-align: center;
   padding-bottom: 30px;
 `
-
 const LoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
 
-
-
 function Freelances() {
-  const [freelancersList, setFreelancersList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [isDataLoading, setDataLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [freelancersList, setFreelancesList] = useState([])
 
   useEffect(() => {
-    async function fetchFreelances(){
-      setIsLoading(true);
-      try{
-        const response = await fetch(`http://localhost:8000/freelances`);
-        const {freelancersList} = await response.json();
-        setFreelancersList(freelancersList);
-      } catch(err){
-        console.log('==== ERROR ====', err);
-        setError(true);
-      } finally{
-        setIsLoading(false);
+    async function fetchFreelances() {
+      setDataLoading(true)
+      try {
+        const response = await fetch(`http://localhost:8000/freelances`)
+        const { freelancersList } = await response.json()
+        setFreelancesList(freelancersList)
+      } catch (err) {
+        console.log(err)
+        setError(true)
+      } finally {
+        setDataLoading(false)
       }
     }
-    fetchFreelances();
+    fetchFreelances()
   }, [])
 
-  if(error){
+  if (error) {
     return <span>Oups il y a eu un problème</span>
   }
-  
+
   return (
     <div>
       <PageTitle>Trouvez votre prestataire</PageTitle>
       <PageSubtitle>
         Chez Shiny nous réunissons les meilleurs profils pour vous.
       </PageSubtitle>
-      {isLoading ? (
+      {isDataLoading ? (
         <LoaderWrapper>
           <Loader />
         </LoaderWrapper>
